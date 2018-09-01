@@ -10,18 +10,32 @@ např. jedno z následujících:
 Vývoj trendů napříč historií pro následující datové sady: 
 * množství studentů + rozlišení dle krajů/obcí 
 * množství OSVČ + rozlišení dle krajů/obcí; 
+	https://data.cssz.cz/web/otevrena-data/graf-pocet-osvc-v-okresech-stav-k
 * vývoje populace dle krajů/obcí; 
+	https://www.czso.cz/csu/czso/obyvatelstvo-a-domy-v-obcich-podle-vysledku-scitani-od-roku-1869
+	https://www.czso.cz/csu/czso/obyvatelstvo-k-3112-podle-pohlavi-v-obcich
 
 Případně také
 * Data a dostupná rozhraní pro aktuální dopravní situaci.
 * Studium a sběr dat ohledně vzniku pojistných událostí. 
 
 ## Další linky/zdroje
-Směrná hodnota
+* Směrná hodnota
 	http://smernahodnota.financnisprava.cz/2017/byt/
 	http://smernahodnota.financnisprava.cz/2018/byt/
 	http://smernahodnota.financnisprava.cz/2018/pozemek/
 	http://smernahodnota.financnisprava.cz/2018/nebyt/
+
+* Nemovitosti
+	https://www.cuzk.cz/stat
 	
-Ostatní
+* Ostatní
 	https://data.gov.cz/
+	https://www.czso.cz/csu/czso/zemreli-podle-pricin-smrti-a-pohlavi-v-cr-krajich-a-okresech
+	https://www.czso.cz/csu/czso/prumerne-spotrebitelske-ceny-vybranych-vyrobku-potravinarske-vyrobky
+	https://www.czso.cz/csu/czso/bilance-meziokresni-vyjizdky-do-zamestnani-podle-vysledku-scitani-2011
+	https://www.czso.cz/csu/czso/nadeje-doziti-v-okresech-a-spravnich-obvodech-orp
+	https://www.czso.cz/csu/czso/prumerne-spotrebitelske-ceny-vybranych-vyrobku-potravinarske-vyrobky
+	http://data.ctu.cz/dataset/kontroly-pokuty
+	https://www.hackujstat.cz/#datovesady
+	
