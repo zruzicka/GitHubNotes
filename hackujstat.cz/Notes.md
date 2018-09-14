@@ -39,3 +39,12 @@ Případně také
 	http://data.ctu.cz/dataset/kontroly-pokuty
 	https://www.hackujstat.cz/#datovesady
 	
+	http://aplikace.policie.cz/dopravni-informace/Default.aspx
+	http://meteo.rlp.cz/
+	https://www.czso.cz/csu/czso/cizinci-podle-statniho-obcanstvi-veku-a-pohlavi
+	
+	web SŽDC http://provoz.szdc.cz/Tabule/
+	
+* Golemio
+	https://golemio.docs.apiary.io/
+	https://ckc-emea.cisco.com/corev4/token?client_secret=client_secret&client_id=client_id&grant_type=password&username=username&password=password
