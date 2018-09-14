@@ -16,10 +16,14 @@ import java.util.Arrays;
  */
 public class Filter {
 
-    static Columns outputColumns = new Columns(new String[] { "id", "hodnota", "rok", "datum", "okres_kod", "okres",
-            "kraj_txt", "pohlavi", "obcanstvi_kod", "obcanstvi", "vek_txt", "vek_index" });
+    String[] targetColumns = new String[] { "id", "hodnota", "rok", "datum", "okres_kod", "okres", "kraj_txt",
+            "pohlavi", "obcanstvi_kod", "obcanstvi", "vek_txt", "vek_index" };
+    String[] sourceColumns = new String[] { "idhod", "hodnota", "rok", "rok", "vuzemi_kod", "vuzemi_txt", "kraj_txt",
+            "pohlavi_txt", "stobcan_kod", "stobcan_txt", "vek_txt", "vek_kod" };
+    Columns outputColumns = new Columns(targetColumns, sourceColumns);
 
     public static void main(String[] args) {
+        Filter filter = new Filter();
         try {
             if (args.length < 1) {
                 System.err.println("Input CSV file must be specified via argument.");
@@ -32,27 +36,32 @@ public class Filter {
 
             FileWriter fw = new FileWriter(inputFile + ".filtered.csv", false);
             BufferedWriter bw = new BufferedWriter(fw);
-            bw.write(outputColumns.getColumnsString() + "\n");
+            bw.write(filter.outputColumns.getTargetColumnsString() + "\n");
 
             String[] header = null;
             String readLine = "";
             int i = 1;
             while ((readLine = b.readLine()) != null) {
-                String[] columns = readLine.split(",");
                 if (i == 1) { // Defines header columns.
-                    header = columns;
-                } else {
-                    bw.write(readLine + "\n");
+                    header = readLine.replaceAll("\"", "").split(",");
+                    filter.outputColumns.initSourceColumnIndices(header);
+                    filter.outputColumns.columnsDebugInfo(header);
+                    i++;
+                    continue;
                 }
+                String[] columns = readLine.split(",");
+                String output = filter.outputColumns.transformInputData(columns);
                 System.out.println("(" + i + ") input:" + readLine); // TMP output.
+                System.out.println("(" + i + ") output:" + output); // TMP output.
+                bw.write(output + "\n");
 
                 i++;
                 if (i == 10) { // TMP condition to break whole files processing.
                     break;
                 }
             }
-            System.out.println(Arrays.toString(header)); // TMP header output.
 
+            b.close();
             bw.close();
 
         } catch (IOException e) {
@@ -63,26 +72,54 @@ public class Filter {
 }
 
 /**
- * Carries columns definition.
+ * Carries columns transformation definition.
  */
 class Columns {
 
-    final String[] columns;
+    final String[] targetColumns;
+    final String[] correspondingSourceColumns;
+    final int[] sourceColumnIndices;
 
-    public Columns(String[] columns) {
+    public Columns(String[] targetColumns, String[] correspondingSourceColumns) {
         super();
-        this.columns = columns;
+        this.targetColumns = targetColumns;
+        this.correspondingSourceColumns = correspondingSourceColumns;
+        sourceColumnIndices = new int[targetColumns.length];
     }
 
-    public String[] getColumns() {
-        return columns;
+    public void initSourceColumnIndices(String[] inputHeader) {
+        int columnIndex = 0;
+        for (String searchedSourceColumn : correspondingSourceColumns) {
+            for (int i = 0; i < inputHeader.length; i++) {
+                String inputColumn = inputHeader[i];
+                if (inputColumn.equals(searchedSourceColumn)) {
+                    sourceColumnIndices[columnIndex] = i;
+                }
+            }
+            columnIndex++;
+        }
     }
 
-    public String getColumnsString() {
+    public void columnsDebugInfo(String[] header) {
+        System.out.println("targetColumns: " + Arrays.toString(targetColumns));
+        System.out.println("correspondingSourceColumns: " + Arrays.toString(correspondingSourceColumns));
+        System.out.println("sourceColumnIndices: " + Arrays.toString(sourceColumnIndices));
+        System.out.println("full input header: " + Arrays.toString(header));
+    }
+
+    public String transformInputData(String[] inputValues) {
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < columns.length; i++) {
-            sb.append("\"" + columns[i] + "\"");
-            if (i < columns.length - 1) {
+        for (int i = 0; i < sourceColumnIndices.length; i++) {
+            sb.append(inputValues[sourceColumnIndices[i]] + ",");
+        }
+        return sb.toString();
+    }
+
+    public String getTargetColumnsString() {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < targetColumns.length; i++) {
+            sb.append("\"" + targetColumns[i] + "\"");
+            if (i < targetColumns.length - 1) {
                 sb.append(",");
             }
         }
