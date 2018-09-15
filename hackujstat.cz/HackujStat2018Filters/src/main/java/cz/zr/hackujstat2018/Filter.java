@@ -4,9 +4,12 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 /**
@@ -16,6 +19,9 @@ import java.util.Arrays;
  */
 public class Filter {
 
+    static boolean applyDemoProcessing = false;
+    static boolean isInputDebug = false;
+
     String[] targetColumns = new String[] { "id", "hodnota", "rok", "datum", "okres_kod", "okres", "kraj_txt",
             "pohlavi", "obcanstvi_kod", "obcanstvi", "vek_txt", "vek_index" };
     String[] sourceColumns = new String[] { "idhod", "hodnota", "rok", "rok", "vuzemi_kod", "vuzemi_txt", "kraj_txt",
@@ -23,6 +29,7 @@ public class Filter {
     Columns outputColumns = new Columns(targetColumns, sourceColumns);
 
     public static void main(String[] args) {
+        long started = System.currentTimeMillis();
         Filter filter = new Filter();
         try {
             if (args.length < 1) {
@@ -34,8 +41,9 @@ public class Filter {
             File f = new File(inputFile);
             BufferedReader b = new BufferedReader(new InputStreamReader(new FileInputStream(f), "UTF8"));
 
-            FileWriter fw = new FileWriter(inputFile + ".filtered.csv", false);
-            BufferedWriter bw = new BufferedWriter(fw);
+            Writer fstream = new OutputStreamWriter(new FileOutputStream(inputFile + ".filtered.csv"), StandardCharsets.UTF_8);
+            BufferedWriter bw = new BufferedWriter(fstream);
+
             bw.write(filter.outputColumns.getTargetColumnsString() + "\n");
 
             String[] header = null;
@@ -51,12 +59,15 @@ public class Filter {
                 }
                 String[] columns = readLine.split(",");
                 String output = filter.outputColumns.transformInputData(columns);
-                System.out.println("(" + i + ") input:" + readLine); // TMP output.
-                System.out.println("(" + i + ") output:" + output); // TMP output.
+                if (isInputDebug) {
+                    System.out.println("(" + i + ") input:" + readLine); // TMP output.
+                    System.out.println("(" + i + ") output:" + output); // TMP output.
+                }
                 bw.write(output + "\n");
 
                 i++;
-                if (i == 10) { // TMP condition to break whole files processing.
+                if (applyDemoProcessing && i == 10) {
+                    // Demo mode processes only a small subset of data instead of whole file.
                     break;
                 }
             }
@@ -67,7 +78,8 @@ public class Filter {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
+        long finished = System.currentTimeMillis();
+        System.out.println("Finished in " + (finished - started) + " ms.");
     }
 }
 
@@ -110,7 +122,10 @@ class Columns {
     public String transformInputData(String[] inputValues) {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < sourceColumnIndices.length; i++) {
-            sb.append(inputValues[sourceColumnIndices[i]] + ",");
+            int columnIndex = sourceColumnIndices[i];
+            if (columnIndex < inputValues.length) {
+                sb.append(inputValues[columnIndex] + ",");
+            }
         }
         return sb.toString();
     }
