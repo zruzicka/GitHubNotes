@@ -48,3 +48,11 @@ Případně také
 * Golemio
 	https://golemio.docs.apiary.io/
 	https://ckc-emea.cisco.com/corev4/token?client_secret=client_secret&client_id=client_id&grant_type=password&username=username&password=password
+
+* Organizator
+	https://hackujstat.cz/hackathon-2017/index.html
+	http://osf.cz/
+
+* HlidacStatu.cz
+	https://www.hlidacstatu.cz/api
+	https://hlidacstatu.docs.apiary.io/
